@@ -57,7 +57,7 @@ def list_suggestions():
 
 
 @app.get("/suggestions/{id}")
-def get_suggestion(id: int):
+def get_suggestion(id: str):
     """Return a single suggestion by ID, or 404 if not found."""
     query = f"""
         SELECT id, category, message, created_at
@@ -74,17 +74,15 @@ def get_suggestion(id: int):
 @app.post("/suggestions", status_code=201)
 def create_suggestion(body: SuggestionCreate):
     """Insert a new suggestion and return the created record."""
-    # Assign an id by taking the current maximum and adding 1.
-    # This is intentionally simple — a production app would use a proper
-    # sequence or UUID instead.
+    # Generate a unique id using BigQuery's built-in GENERATE_UUID().
     insert_query = f"""
         INSERT INTO `{TABLE}` (id, category, message, created_at)
-        SELECT
-            COALESCE(MAX(id), 0) + 1,
+        VALUES (
+            GENERATE_UUID(),
             '{body.category}',
             '''{body.message}''',
             CURRENT_TIMESTAMP()
-        FROM `{TABLE}`
+        )
     """
     client.query(insert_query).result()
 

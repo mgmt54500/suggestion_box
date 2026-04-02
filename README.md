@@ -253,7 +253,7 @@ Now that your service exists in Cloud Run, assign it the service account that ha
 | Method | Path | Description |
 |---|---|---|
 | `GET` | `/suggestions` | Returns all suggestions, newest first |
-| `GET` | `/suggestions/{id}` | Returns a single suggestion by ID (404 if not found) |
+| `GET` | `/suggestions/{id}` | Returns a single suggestion by UUID (404 if not found) |
 | `POST` | `/suggestions` | Creates a new suggestion; returns the created record |
 
 **POST body example:**
